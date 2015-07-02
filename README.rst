@@ -80,3 +80,9 @@ be more than glad to fix them.
 
 Pull requests are more than welcome!
 
+Build status
+============
+
+.. image:: https://circleci.com/gh/andresriancho/docker-tag-naming.svg?style=svg
+    :target: https://circleci.com/gh/andresriancho/docker-tag-naming
+
