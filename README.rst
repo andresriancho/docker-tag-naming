@@ -79,6 +79,18 @@ between what's shown through the web interface (your browser) and the REST API.
 Take this into account when using these commands in continuous integration
 scripts, since your recently pushed tags might not appear right away!
 
+A command that might help as a workaround is `docker-tag-naming refresh` which
+will query the API until a new version is available or the timeout is reached:
+
+::
+
+    $ docker-tag-naming refresh username/base-image develop
+    Initial version is v113-cd14580-develop , waiting for new release...
+    New version found: v114-5151bc0-develop
+
+    $ docker-tag-naming latest andresriancho/w3af develop
+    v114-5151bc0-develop
+
 
 Reporting bugs
 ==============

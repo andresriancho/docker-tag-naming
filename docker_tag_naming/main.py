@@ -3,6 +3,7 @@ import argparse
 from .bump import run_bump
 from .latest import run_latest
 from .forge import run_forge
+from .refresh import run_refresh
 
 
 def parse_args_and_run():
@@ -49,11 +50,23 @@ def parse_args_and_run():
     parser_bump.add_argument('--commit-id', required=True,
                              help='Git commit id for the newly created tag')
 
+    #
+    #   Refresh
+    #
+    parser_latest = subparsers.add_parser('refresh',
+                                          help='Loop until the latest tag in'
+                                               ' the registry changes')
+    parser_latest.add_argument('image',
+                               help='The image to query (ie. username/image)')
+    parser_latest.add_argument('branch',
+                               help='The branch name (ie. master)')
+
     args = parser.parse_args()
 
     {'bump': run_bump,
      'latest': run_latest,
-     'forge': run_forge}.get(args.subparser_name)(args)
+     'forge': run_forge,
+     'refresh': run_refresh}.get(args.subparser_name)(args)
 
 
 def main():
