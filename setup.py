@@ -20,7 +20,7 @@ setup(
 
     packages=find_packages(exclude=('ci',)),
     include_package_data=True,
-    install_requires=['requests>=2.7.0'],
+    install_requires=['requests[security]>=2.7.0'],
 
     entry_points = {
         'console_scripts': [

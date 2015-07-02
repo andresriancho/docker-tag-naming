@@ -1,6 +1,7 @@
 import requests
 import logging
 
+from requests.exceptions import RequestException
 from .constants import VERSION_FORMAT
 
 API_URL = 'https://registry.hub.docker.com/v1/repositories/%s'
@@ -25,7 +26,7 @@ def version_parser(version_string):
     :return: A tuple with the parsed version / an exception when the version
              format is unknown/incorrect
     """
-    version, commit, branch = version_string.split(3)
+    version, commit, branch = version_string.split('-', 3)
 
     # Remove the "v"
     version_number = version[1:]
@@ -45,14 +46,37 @@ def get_all_tags(image_name, branch=None):
     output = []
 
     spec = '%s/tags' % image_name
-    for tag_info in requests.get(API_URL % spec).json():
-        tag_name = tag_info['name']
+    try:
+        response = requests.get(API_URL % spec)
+        print API_URL % spec
+    except RequestException, re:
+        raise DockerTagNamingException('HTTP request exception "%s"' % re)
+
+    if response.status_code != 200:
+        msg = ('Received unexpected status code %s from the registry'
+               ' REST API, the image might not exist or is private.')
+        raise DockerTagNamingException(msg % response.status_code)
+
+    try:
+        json_data = response.json()
+    except ValueError:
+        msg = 'JSON decode failed! Raw data is: "%s". Please report a bug.'
+        raise DockerTagNamingException(msg % (response.content[:25]).strip())
+
+    try:
+        tag_names = [tag_info['name'] for tag_info in json_data]
+    except Exception:
+        msg = ('The JSON data does not contain the expected format!'
+               ' Raw data is: "%s". Please report a bug.')
+        raise DockerTagNamingException(msg % (response.content[:25]).strip())
+
+    for tag_name in tag_names:
 
         try:
             version = version_parser(tag_name)
         except Exception, e:
-            msg = 'Ignoring version tag with incorrect format: "%s"'
-            logging.debug(msg % e)
+            msg = 'Ignoring version tag "%s" with incorrect format: "%s"'
+            logging.debug(msg % (tag_name, e))
             continue
 
         if branch is not None:
@@ -83,3 +107,7 @@ def version_bump(image_name, branch, commit):
 
     version.bump()
     return version
+
+
+class DockerTagNamingException(Exception):
+    pass
