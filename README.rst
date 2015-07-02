@@ -71,6 +71,15 @@ Then in the build where the base image is used, query the latest:
 Using these steps will guarantee that the latest available image is always used
 in your builds.
 
+Important disclaimer
+====================
+
+The docker registry/hub (https://registry.hub.docker.com/) seems to have a delay
+between what's shown through the web interface (your browser) and the REST API.
+Take this into account when using these commands in continuous integration
+scripts, since your recently pushed tags might not appear right away!
+
+
 Reporting bugs
 ==============
 
