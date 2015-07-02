@@ -48,7 +48,6 @@ def get_all_tags(image_name, branch=None):
     spec = '%s/tags' % image_name
     try:
         response = requests.get(API_URL % spec)
-        print API_URL % spec
     except RequestException, re:
         raise DockerTagNamingException('HTTP request exception "%s"' % re)
 
