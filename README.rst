@@ -56,14 +56,16 @@ version:
 
 ::
 
-    $ docker tag username/base-image username/base-image:`docker-tag-naming bump username/base-image ${BRANCH} --commit-id ${COMMIT_ID}`
-    $ docker push username/base-image:`docker-tag-naming bump username/base-image ${BRANCH} --commit-id ${COMMIT_ID}`
+    $ export NEXT_TAG=`docker-tag-naming bump username/base-image ${BRANCH} --commit-id ${COMMIT_ID}`
+    $ docker tag username/base-image username/base-image:$NEXT_TAG
+    $ docker push username/base-image:$NEXT_TAG
 
 Then in the build where the base image is used, query the latest:
 
 ::
 
-    $ render-compose --latest-base-image `docker-tag-naming latest username/base-image develop`
+    $ export LATEST_TAG=`docker-tag-naming latest username/base-image develop`
+    $ render-compose --latest-base-image $LATEST_TAG
     $ docker-compose up
 
 Using these steps will guarantee that the latest available image is always used
