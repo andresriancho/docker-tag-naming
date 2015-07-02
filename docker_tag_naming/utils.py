@@ -105,6 +105,7 @@ def version_bump(image_name, branch, commit):
         return Version(1, commit, branch)
 
     version.bump()
+    version.commit = commit
     return version
 
 
