@@ -1,7 +1,24 @@
 #!/usr/bin/env python
+import os
+
 from setuptools import setup, find_packages
 from os.path import join, dirname
 from docker_tag_naming import __VERSION__
+
+
+if os.environ.get('CIRCLECI', None) is not None:
+    # monkey-patch distutils upload
+    #
+    # http://bugs.python.org/issue21722
+    # https://github.com/tagcubeio/tagcube-cli/issues/4
+    try:
+        from distutils.command import upload as old_upload_module
+        from ci.upload import upload as fixed_upload
+        old_upload_module.upload = fixed_upload
+    except ImportError:
+        # In some cases I install tagcube-cli in CircleCI, but not from the
+        # repository where the ci module is present
+        pass
 
 
 setup(

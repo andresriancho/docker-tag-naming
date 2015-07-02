@@ -1,0 +1,12 @@
+test:
+  override:
+
+    - "pylint --msg-template='{msg_id}:{line:3d},{column}: {obj}: {msg}' -E `ls -d */`"
+
+    - nosetests -v docker_tag_naming
+
+deployment:
+  pypi:
+    branch: master
+    commands:
+      - ci/pypi-deploy.sh

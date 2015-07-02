@@ -50,7 +50,7 @@ def parse_args_and_run():
                              help='Git commit id for the newly created tag')
 
     args = parser.parse_args()
-    
+
     {'bump': run_bump,
      'latest': run_latest,
      'forge': run_forge}.get(args.subparser_name)(args)
