@@ -92,10 +92,10 @@ def get_all_tags_with_auth(image_name, branch=None):
         raise DockerTagNamingException('HTTP request exception "%s"' % re)
 
     if response.status_code in (404,):
-        msg = ('Received unexpected status code %s from the registry'
-               ' REST API, the image might not exist in the registry but was'
-               ' registered in the hub. Try doing a "docker push %s"')
-        raise AuthException(msg % (response.status_code, image_name))
+        logging.debug('Received unexpected status code %s from the registry'
+                      ' REST API, the image might not exist in the registry'
+                      ' but was registered in the hub.')
+        return []
 
     if response.status_code != 200:
         msg = ('Received unexpected status code %s from the registry'
