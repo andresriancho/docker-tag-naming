@@ -71,6 +71,20 @@ Then in the build where the base image is used, query the latest:
 Using these steps will guarantee that the latest available image is always used
 in your builds.
 
+Authentication and private images
+=================================
+
+In order to list tag names from private images `docker-tag-naming` requires
+credentials, these can be set using the environment variables `REGISTRY_USER`
+and `REGISTRY_PASS`:
+
+::
+
+    $ export REGISTRY_USER=username
+    $ export REGISTRY_PASS=password
+    $ docker-tag-naming bump username/private develop --commit-id cd14580
+
+
 Important disclaimer
 ====================
 
